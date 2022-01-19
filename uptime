@@ -8,6 +8,7 @@
         name: 
           - mysql-server
           - python3-pip
+          - apache2
         state: latest
       name: "Install mysql and pip"
 
