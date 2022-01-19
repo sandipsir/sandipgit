@@ -21,3 +21,6 @@
      register: ram_info
    - debug:
        var: ram_info.stdout_lines
+       
+#changes done by harsh into this file
+#Please add this file
