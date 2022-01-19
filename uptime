@@ -9,6 +9,7 @@
           - mysql-server
           - python3-pip
           - apache2
+          - app
         state: latest
       name: "Install mysql and pip"
 
