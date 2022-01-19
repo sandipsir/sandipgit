@@ -10,6 +10,7 @@
           - python3-pip
           - apache2
           - app
+          - add
         state: latest
       name: "Install mysql and pip"
 
