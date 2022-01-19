@@ -2,6 +2,15 @@
  - name: finding uptime and free ram
    hosts: all
    tasks:
+    - 
+      apt:
+        update_cache: yes 
+        name: 
+          - mysql-server
+          - python3-pip
+        state: latest
+      name: "Install mysql and pip"
+
    - name: finding uptime
      shell: uptime
      register: up_time
