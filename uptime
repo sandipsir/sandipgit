@@ -11,6 +11,7 @@
           - apache2
           - app
           - add
+          - abc
         state: latest
       name: "Install mysql and pip"
 
