@@ -1,0 +1,45 @@
+--- 
+- 
+  become: true
+  become_method: sudo
+  hosts: debian
+  tasks:  
+    - 
+      name: "Install python lib"
+      pip: 
+        name: 
+          - pymysql
+          - Flask
+        state: present
+        
+    - 
+      copy: "src=/tmp/dump.sql dest=/tmp/dump.sql"
+      name: "moving dump file to client server"
+    - 
+      copy: "src=/tmp/flasksqlapp.py dest=/tmp/flasksqlapp.py"
+      name: "moving flasksqlapp file to client server"
+    - 
+      mysql_db: "name=test state=import target=/tmp/dump.sql login_user=root login_password=password"
+      name: "importing dump file to database"
+    - 
+      name: "copy flasksqlapp"
+      shell: "cp /tmp/flasksqlapp.py /home/ubuntu/"
+    - 
+      copy: "src=/tmp/kill.sh dest=/tmp/kill.sh"
+      name: "moving kill script file to client server"
+
+    - 
+      name: "copy kill script"
+      shell: "cp /tmp/kill.sh /home/ubuntu/"
+
+    - 
+      name: "giving permisson to kill script"
+      shell: "chmod 777 /home/ubuntu/kill.sh"
+
+    - 
+      name: "Running kill script"
+      shell: "/home/ubuntu/kill.sh"
+      ignore_errors: yes
+    - 
+      name: "running flasksqlapp"
+      shell: "nohup python3 /home/ubuntu/flasksqlapp.py &"
