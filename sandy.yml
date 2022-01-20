@@ -1,0 +1,35 @@
+---
+- name: nginx install & start service
+  hosts: all
+  become: true
+
+  tasks:
+  - name: install nginx
+    apt:
+      name: nginx
+      state: latest
+
+  - name: start nginx
+    service:
+      name: nginx
+      state: started
+
+  - name: web.html copy
+    template:
+      src: /opt/web.html
+      dest: /usr/share/nginx/html/web.html
+      owner: root
+      mode: '0664'
+
+  - name: copy the content of the web site
+    copy:
+      src: /opt/web.html
+      dest: /usr/share/nginx/html/web.html
+
+  - name: restart nginx
+    apt:
+      name: nginx
+      state: latest
+
+#     name: start pm2
+
