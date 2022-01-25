@@ -1,0 +1,92 @@
+---
+- hosts: all
+  gather_facts: yes
+  become: yes
+  vars:
+    NODEJS_VERSION: "8"
+    ansible_distribution_release: "xenial" #trusty
+  tasks:
+    - name: Install the gpg key for nodejs LTS
+      apt_key:
+        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+        state: present
+
+    - name: Install the nodejs LTS repos
+      apt_repository:
+        repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release }} main"
+        state: present
+        update_cache: yes
+
+    - name: Install the nodejs
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install the nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+
+    - name: install NPM
+      apt:
+        name: npm
+        state: latest
+
+    - name: Install PM2
+      command: chdir=/root/ npm install pm2 -g
+
+    - name: creat file index.js
+      file:
+        path: "/root/index.js"
+        state: touch
+
+    - name: install express
+      command: chdir=/root/ npm install express
+
+    - name: crete test.js file
+      script: test.sh
+
+    - name: start nodejs
+      command: chdir=/root/userapi pm2 start test.js
+      
+    - 
+      apt:
+        update_cache: yes 
+        name: 
+          - mysql-server
+          - python3-pip
+        state: latest
+      name: "Install mysql and pip"
+      
+    - 
+      name: "Install python lib"
+      pip: 
+        name: 
+          - pymysql
+        state: present
+      
+    - 
+      command: "mysql -u root --execute=\"UPDATE mysql.user SET plugin='mysql_native_password' WHERE User='root';\""
+      ignore_errors: yes
+      name: "create mysql root user plugin"
+    - 
+      command: "mysql -u root --execute=\"FLUSH PRIVILEGES;\""
+      ignore_errors: yes
+      name: "grant priv"
+    - 
+      name: "service mysql restart"
+      shell: "service mysql restart"
+    - 
+      command: "mysql -u root --execute=\"ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';\""
+      ignore_errors: yes
+      name: "changing root user password"
+    - 
+      mysql_db: "name=test state=present login_user=root login_password=password"
+      ignore_errors: yes
+      name: "create mysql database"
+

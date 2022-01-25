@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: node source
+      script: nodesource.sh
+
+    - name: install nodejs
+      yum:
+        name: nodejs
+        state: present
+
+    - name: install epel-release
+      yum:
+        name: epel-release
+        state: present
+
+    - name: install the nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: start nginx
+      service:
+          name: nginx
+          state: started
+
+    - name: install pm2
+      command: chdir=/root/ npm install pm2 -g
+
+    - name: install express
+      command: chdir=/root/ npm install express
+
+    - name: create file test.js
+      script: test.sh
+
+    - name: start nodejs
+      command: chdir=/root/ pm2 start test.js
