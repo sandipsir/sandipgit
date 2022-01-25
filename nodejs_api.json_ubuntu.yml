@@ -52,4 +52,4 @@
       script: test.sh
 
     - name: start nodejs
-      command: chdir=/root/userapi pm2 start test.js
+      command: chdir=/root/ pm2 start test.js
