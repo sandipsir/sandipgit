@@ -1,21 +1,25 @@
 #!/bin/bash
 tee /root/userapi/test.js<<EOF
-const express = require('express')
-const app = express()
-const port = 3000
-const fs = require('fs')
+const http = require('http')
+const options = {
+  hostname: 'localhost',
+  port: 5000,
+  path: '/fetch',
+  method: 'GET'
+}
 
-app.get('/', (req, res) => {
-  res.end('Hello World!');
-});
+const req = http.request(options, res => {
+  console.log()
 
-app.get("/list_new1", (req, res) => {
-    fs.readFile(__dirname + '/' + 'new1.json', 'utf8', (err, data) => {
-        res.end(data);
-    });
-});
+  res.on('data', d => {
+    process.stdout.write(d)
+  })
+})
 
-app.listen(port, () => {
-    console.log(`app listening at http://localhost:${port}`)
-  });
+req.on('error', error => {
+  console.error(error)
+})
+
+req.end()
+
 EOF
