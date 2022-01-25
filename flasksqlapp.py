@@ -19,7 +19,7 @@ def facilityy():
             print(sql)
             cursor.execute(sql)
             result = cursor.fetchall()
-            with open ('abc.txt', 'w') as f:
+            with open ('abc.json', 'w') as f:
             	f.write(str(result[0]))
             resp=jsonify(result[0])
             return resp
