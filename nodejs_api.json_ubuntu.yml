@@ -50,6 +50,12 @@
 
     - name: install axios
       command: chdir=/root/ npm install axios
+      
+    - 
+      name: "Running kill script"
+      command: chdir=/root/pm2 stop test.js
+      ignore_errors: yes
+
 
     - 
       copy: "src=test.js dest=/root/test.js"
