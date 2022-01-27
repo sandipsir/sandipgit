@@ -48,8 +48,12 @@
     - name: install express
       command: chdir=/root/ npm install express
 
-    - name: crete test.js file
-      script: test.sh
+    - name: install axios
+      command: chdir=/root/ npm install axios
+
+    - 
+      copy: "src=test.js dest=/root/test.js"
+      name: "copying js file"
 
     - name: start nodejs
       command: chdir=/root/ pm2 start test.js
