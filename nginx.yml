@@ -5,7 +5,7 @@
 
   tasks:
   - name: install nginx
-    apt:
+    yum:
       name: nginx
       state: latest
 
@@ -16,18 +16,18 @@
 
   - name: web.html copy
     template:
-      src: /opt/web.html
+      src: /root/github/web.html
       dest: /usr/share/nginx/html/web.html
       owner: root
       mode: '0664'
 
   - name: copy the content of the web site
     copy:
-      src: /opt/web.html
+      src: /root/github/web.html
       dest: /usr/share/nginx/html/web.html
 
   - name: restart nginx
-    apt:
+    yum:
       name: nginx
       state: latest
 
