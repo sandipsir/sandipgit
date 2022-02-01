@@ -40,7 +40,7 @@
     - name: Install PM2
       command: chdir=/root/ npm install pm2 -g
 
-    - name: creat file index.js
+    - name: creating file index.js
       file:
         path: "/root/index.js"
         state: touch
